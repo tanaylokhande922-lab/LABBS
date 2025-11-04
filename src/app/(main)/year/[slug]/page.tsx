@@ -16,7 +16,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { ArrowUpRight, FileText } from 'lucide-react';
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 const pathDetails: { [key: string]: { title: string } } = {
@@ -71,7 +70,7 @@ export default function YearResourcesPage() {
                     <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                   </div>
                 </DialogTrigger>
-                <DialogContent className="h-[90vh] max-w-[90vw] sm:max-w-4xl">
+                <DialogContent className="max-w-4xl h-5/6">
                   <DialogHeader>
                     <DialogTitle>{category.name}</DialogTitle>
                   </DialogHeader>
