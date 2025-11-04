@@ -37,6 +37,7 @@ const firstYearSubjectTreasureSubCategories = [
   { id: 'm1', name: 'M1' },
   { id: 'eg', name: 'EG' },
   { id: 'beee', name: 'BEEE' },
+  { id: 'bcme', name: 'BCME' },
 ]
 
 const syllabusDriveLink =
