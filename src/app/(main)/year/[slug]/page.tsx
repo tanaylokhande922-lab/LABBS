@@ -10,12 +10,7 @@ import {
 } from '@/components/ui/accordion';
 import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
-
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
+import { useParams } from 'next/navigation';
 
 const pathDetails: { [key: string]: { title: string } } = {
   '1st-year': { title: '1st Year Resources' },
@@ -31,9 +26,16 @@ const resourceCategories = [
   { id: 'subject-treasure', name: 'Subject Treasure' },
 ];
 
-export default function YearResourcesPage({ params }: PageProps) {
-  const details = pathDetails[params.slug] || { title: 'Resources' };
-  const is1stYearSyllabus = params.slug === '1st-year';
+export default function YearResourcesPage() {
+  const params = useParams();
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+
+  const details = (slug && pathDetails[slug]) || { title: 'Resources' };
+  const is1stYearSyllabus = slug === '1st-year';
+
+  if (!slug) {
+    return null; // Or a loading/error state
+  }
 
   return (
     <div className="container py-8">
@@ -75,7 +77,7 @@ export default function YearResourcesPage({ params }: PageProps) {
                 {category.name}
               </AccordionTrigger>
               <AccordionContent>
-                <ResourceDisplay path={`${params.slug}/${category.id}`} />
+                <ResourceDisplay path={`${slug}/${category.id}`} />
               </AccordionContent>
             </AccordionItem>
           );
