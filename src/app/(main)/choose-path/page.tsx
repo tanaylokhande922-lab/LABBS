@@ -2,7 +2,7 @@
 
 import { PathCard } from '@/components/path-card';
 import { useAuthContext } from '@/components/providers/auth-provider';
-import { BookOpen, BookOpenCheck, Landmark, Target } from 'lucide-react';
+import { Book, GraduationCap, Trophy, Building2 } from 'lucide-react';
 
 export default function ChoosePathPage() {
   const { user } = useAuthContext();
@@ -12,25 +12,25 @@ export default function ChoosePathPage() {
       title: '1st Year',
       slug: '1st-year',
       href: '/year/1st-year',
-      icon: <BookOpen className="h-6 w-6" />,
+      icon: <Book className="h-6 w-6" />,
     },
     {
       title: '2nd Year',
       slug: '2nd-year',
       href: '/year/2nd-year/select-branch',
-      icon: <BookOpenCheck className="h-6 w-6" />,
+      icon: <GraduationCap className="h-6 w-6" />,
     },
     {
       title: 'GATE',
       slug: 'gate',
       href: '/year/gate',
-      icon: <Target className="h-6 w-6" />,
+      icon: <Trophy className="h-6 w-6" />,
     },
     {
       title: 'UPSC',
       slug: 'upsc',
       href: '/year/upsc',
-      icon: <Landmark className="h-6 w-6" />,
+      icon: <Building2 className="h-6 w-6" />,
     },
   ];
 

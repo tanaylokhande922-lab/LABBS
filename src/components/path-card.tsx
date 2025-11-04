@@ -17,7 +17,7 @@ export function PathCard({ title, href, icon }: PathCardProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="rounded-lg bg-accent/20 p-3 text-accent-foreground">
+              <div className="rounded-lg bg-accent/20 p-3 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
                 {icon}
               </div>
               <CardTitle className="text-lg font-semibold">{title}</CardTitle>
