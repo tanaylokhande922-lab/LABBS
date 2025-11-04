@@ -277,7 +277,7 @@ export default function YearResourcesPage() {
                         <div className="flex items-center gap-3">
                           <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
                           <span className="truncate text-sm font-medium">
-                            PYQs
+                            ALL SUBJECT PYQS
                           </span>
                         </div>
                         <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
