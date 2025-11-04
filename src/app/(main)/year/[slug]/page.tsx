@@ -8,16 +8,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { ArrowUpRight, FileText, X } from 'lucide-react';
+import { ArrowUpRight, FileText } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
 const pathDetails: { [key: string]: { title: string } } = {
   '1st-year': { title: '1st Year Resources' },
@@ -60,33 +53,19 @@ export default function YearResourcesPage() {
         {resourceCategories.map((category) => {
           if (is1stYearSyllabus && category.id === 'syllabus') {
             return (
-              <Dialog key={category.id}>
-                <DialogTrigger asChild>
-                  <div className="flex cursor-pointer items-center justify-between rounded-lg border bg-card px-4 py-4 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground">
-                    <div className="flex items-center gap-3">
-                      <FileText className="h-5 w-5 text-primary" />
-                      <span>{category.name}</span>
-                    </div>
-                    <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-                  </div>
-                </DialogTrigger>
-                <DialogContent className="h-5/6 max-w-5xl flex flex-col p-2">
-                  <DialogHeader className="flex flex-row items-center justify-between p-2">
-                    <DialogTitle className="text-lg font-semibold">Syllabus</DialogTitle>
-                    <DialogClose className="rounded-sm bg-background/80 p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-                      <X className="h-4 w-4" />
-                      <span className="sr-only">Close</span>
-                    </DialogClose>
-                  </DialogHeader>
-                  <div className="flex-grow">
-                    <iframe
-                      src={syllabusDriveLink}
-                      className="h-full w-full"
-                      allow="autoplay"
-                    ></iframe>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <Link
+                key={category.id}
+                href={syllabusDriveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex cursor-pointer items-center justify-between rounded-lg border bg-card px-4 py-4 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+              >
+                <div className="flex items-center gap-3">
+                  <FileText className="h-5 w-5 text-primary" />
+                  <span>{category.name}</span>
+                </div>
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+              </Link>
             );
           }
 
