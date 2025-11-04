@@ -52,6 +52,8 @@ const summer2025SupplyQuestionPaperLink =
   'https://drive.google.com/drive/folders/1CknMU-u2iw91EViQkHWKNc3XeBK6v8J2?usp=drive_link';
 const em3PyqLink =
   'https://drive.google.com/file/d/17tYDl1BfaTrVpD_BoCzh_4wjdD56Lrs5/view?usp=drive_link';
+const secondYearPyqLink = 
+  'https://drive.google.com/drive/folders/1-Kizk-ZQ6BV0ahdfQgRy_Tc_Cil_09f0?usp=sharing';
 
 
 export default function YearResourcesPage() {
@@ -262,6 +264,20 @@ export default function YearResourcesPage() {
                           <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
                           <span className="truncate text-sm font-medium">
                             EM III ALL PYQ
+                          </span>
+                        </div>
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      </Link>
+                      <Link
+                        href={secondYearPyqLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-secondary"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
+                          <span className="truncate text-sm font-medium">
+                            PYQs
                           </span>
                         </div>
                         <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
