@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 
 type UserCredentials = {
   displayName: string | null;
@@ -10,16 +16,11 @@ type UserCredentials = {
 type AuthContextType = {
   user: UserCredentials | null;
   loading: boolean;
-  login: (user: UserCredentials | null) => void;
+  login: (user: UserCredentials) => void;
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  loading: true,
-  login: () => {},
-  logout: () => {},
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function AuthInitializer({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserCredentials | null>(null);
@@ -29,7 +30,7 @@ function AuthInitializer({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
-  const login = (user: UserCredentials | null) => {
+  const login = (user: UserCredentials) => {
     setUser(user);
     setLoading(false);
   };
@@ -49,4 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <AuthInitializer>{children}</AuthInitializer>;
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
