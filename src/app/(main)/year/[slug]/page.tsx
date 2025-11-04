@@ -1,4 +1,3 @@
-
 'use client';
 
 import ResourceDisplay from '@/components/resources/resource-display';
@@ -70,7 +69,7 @@ export default function YearResourcesPage() {
                     <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                   </div>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl h-5/6">
+                <DialogContent className="max-w-4xl h-5/6 top-1/2 -translate-y-1/2">
                   <DialogHeader>
                     <DialogTitle>{category.name}</DialogTitle>
                   </DialogHeader>
