@@ -11,9 +11,9 @@ export function Logo({ className }: { className?: string }) {
         className
       )}
     >
-      <Image 
-        src="https://storage.googleapis.com/project-spark-inst-images/1719589332506-SVKM-Logo.jpg" 
-        alt="SVKM Logo"
+      <Image
+        src="https://storage.googleapis.com/project-spark-inst-images/1719589332506-SVKM-Logo.jpg"
+        alt="SVKM's E-Library Logo"
         width={40}
         height={40}
         className="rounded-full"
