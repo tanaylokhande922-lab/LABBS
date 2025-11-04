@@ -1,4 +1,6 @@
-import Image from 'next/image';
+'use client';
+
+import { Library } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -11,14 +13,9 @@ export function Logo({ className }: { className?: string }) {
         className
       )}
     >
-      <Image
-        src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsaWJyYXJ5fGVufDB8fHx8MTc2MjI5MDU0M3ww&ixlib=rb-4.1.0&q=80&w=400"
-        alt="SVKM's E-Library Logo"
-        width={40}
-        height={40}
-        className="rounded-full"
-        data-ai-hint="library books"
-      />
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <Library className="h-6 w-6" />
+      </div>
       <span>SVKM's E-Library</span>
     </Link>
   );
