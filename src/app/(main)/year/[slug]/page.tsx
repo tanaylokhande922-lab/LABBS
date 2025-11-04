@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ArrowUpRight, FileText, FolderOpen } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, FileText, FolderOpen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -59,6 +59,16 @@ export default function YearResourcesPage() {
 
   return (
     <div className="container py-8">
+      {is2ndYear && (
+        <div className="mb-6">
+          <Button asChild variant="outline" size="sm">
+            <Link href="/year/2nd-year/select-branch">
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Back to Select Branch
+            </Link>
+          </Button>
+        </div>
+      )}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">{details.title}</h1>
         <p className="mt-2 text-lg text-muted-foreground">
