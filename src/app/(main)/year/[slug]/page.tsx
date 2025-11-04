@@ -28,6 +28,8 @@ const resourceCategories = [
 
 const syllabusDriveLink =
   'https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/view?usp=drive_link';
+const winter2024QuestionPaperLink =
+  'https://drive.google.com/drive/folders/1GsIJ2wLypRbI5gavvqT4wwilQTM4oWD2?usp=drive_link';
 
 export default function YearResourcesPage() {
   const params = useParams();
@@ -38,7 +40,7 @@ export default function YearResourcesPage() {
   }
 
   const details = pathDetails[slug] || { title: 'Resources' };
-  const is1stYearSyllabus = slug === '1st-year';
+  const is1stYear = slug === '1st-year';
 
   return (
     <div className="container py-8">
@@ -51,7 +53,7 @@ export default function YearResourcesPage() {
 
       <Accordion type="multiple" className="w-full space-y-4">
         {resourceCategories.map((category) => {
-          if (is1stYearSyllabus && category.id === 'syllabus') {
+          if (is1stYear && category.id === 'syllabus') {
             return (
               <Link
                 key={category.id}
@@ -66,6 +68,39 @@ export default function YearResourcesPage() {
                 </div>
                 <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
               </Link>
+            );
+          }
+
+          if (is1stYear && category.id === 'question-papers') {
+            return (
+              <AccordionItem
+                value={category.id}
+                key={category.id}
+                className="rounded-lg border bg-card px-4 shadow-sm"
+              >
+                <AccordionTrigger className="text-md py-4 font-semibold hover:no-underline">
+                  {category.name}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-3">
+                    <Link
+                      href={winter2024QuestionPaperLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-secondary"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
+                        <span className="truncate text-sm font-medium">
+                          Winter-2024_Regular_Sem-1_Question Paper
+                        </span>
+                      </div>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    </Link>
+                    <ResourceDisplay path={`${slug}/${category.id}`} />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
             );
           }
 
