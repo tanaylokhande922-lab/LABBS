@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
 
 export const metadata: Metadata = {
-  title: 'CampusConnect',
+  title: "SVKM's E-Library",
   description: 'Your college library resource hub.',
 };
 

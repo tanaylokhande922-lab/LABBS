@@ -12,7 +12,7 @@ export function Logo({ className }: { className?: string }) {
       )}
     >
       <BookHeart className="h-6 w-6" />
-      <span>CampusConnect</span>
+      <span>SVKM's E-Library</span>
     </Link>
   );
 }
