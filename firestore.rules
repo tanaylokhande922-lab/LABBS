@@ -1,0 +1,100 @@
+/**
+ * @file Overview
+ * This ruleset enforces a user-ownership model for user profiles, allowing each user to manage their own data.
+ * Learning paths and resources are publicly readable by all authenticated users.
+ *
+ * @dataStructure
+ * - /users/{userId}: Stores individual user profiles, accessible only to the user.
+ * - /paths/{pathId}: Stores information about learning paths, publicly readable.
+ * - /paths/{pathId}/resources/{resourceId}: Stores learning resources under specific paths, publicly readable.
+ *
+ * @keySecurityDecisions
+ * - User listing is implicitly denied.
+ * - Read-only collections (paths, resources) are handled by allowing public reads.
+ * - The default security posture for ambiguous relationships is strict owner-only access.
+ *
+ * @denormalizationForAuthorization
+ * - Ownership is determined by the path for user profiles (/users/{userId}).
+ * - Paths and Resources are readable by any authenticated user so no denormalization is needed.
+ *
+ * @structuralSegregation
+ * - Private user data is stored under /users/{userId}.
+ * - Public path and resource data is stored under /paths/{pathId} and /paths/{pathId}/resources/{resourceId}.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Controls access to user profile information.
+     * @path /users/{userId}
+     * @allow (create) User with ID 'user123' can create their profile.
+     *   - auth.uid: 'user123'
+     *   - request.resource.data: { "id": "user123", "email": "test@example.com" }
+     * @allow (get) User with ID 'user123' can read their profile.
+     *   - auth.uid: 'user123'
+     * @allow (update) User with ID 'user123' can update their profile.
+     *   - auth.uid: 'user123'
+     * @allow (delete) User with ID 'user123' can delete their profile.
+     *   - auth.uid: 'user123'
+     * @deny (create) User with ID 'user456' cannot create a profile for 'user123'.
+     *   - auth.uid: 'user456'
+     *   - request.resource.data: { "id": "user123", "email": "test@example.com" }
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Controls access to learning path information.
+     * @path /paths/{pathId}
+     * @allow (get) Any authenticated user can read path information.
+     *   - auth.uid: 'user123'
+     * @allow (list) Any authenticated user can list path information.
+     *   - auth.uid: 'user123'
+     * @deny (create) No user can create paths.
+     * @deny (update) No user can update paths.
+     * @deny (delete) No user can delete paths.
+     * @principle Allows public read access for learning paths.
+     */
+    match /paths/{pathId} {
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Controls access to learning resources within a specific path.
+     * @path /paths/{pathId}/resources/{resourceId}
+     * @allow (get) Any authenticated user can read resource information.
+     *   - auth.uid: 'user123'
+     * @allow (list) Any authenticated user can list resources within a path.
+     *   - auth.uid: 'user123'
+     * @deny (create) No user can create resources.
+     * @deny (update) No user can update resources.
+     * @deny (delete) No user can delete resources.
+     * @principle Allows public read access for learning resources.
+     */
+    match /paths/{pathId}/resources/{resourceId} {
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+  }
+}
