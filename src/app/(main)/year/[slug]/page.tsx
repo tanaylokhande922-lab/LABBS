@@ -54,6 +54,7 @@ export default function YearResourcesPage() {
 
   const details = pathDetails[slug] || { title: 'Resources' };
   const is1stYear = slug === '1st-year';
+  const is2ndYear = slug.startsWith('2nd-year-');
   const is2ndYearEce = slug === '2nd-year-ece';
 
   return (
@@ -156,9 +157,9 @@ export default function YearResourcesPage() {
             }
           }
 
-          // Special static content for 2nd Year ECE
-          if (is2ndYearEce) {
-             if (category.id === 'syllabus') {
+          // Special static content for 2nd Year
+          if (is2ndYear) {
+             if (is2ndYearEce && category.id === 'syllabus') {
               return (
                 <Link
                   key={category.id}
