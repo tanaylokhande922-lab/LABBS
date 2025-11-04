@@ -37,7 +37,7 @@ const firstYearSubjectTreasureSubCategories = [
   { id: 'm1', name: 'M1' },
   { id: 'eg', name: 'EG' },
   { id: 'beee', name: 'BEEE' },
-  { id: 'bcme', name: 'BCME' },
+  { id: 'bcme', name: 'BCME', href: 'https://drive.google.com/drive/folders/1Od0uMGZyd9BsqJ7Un3oTEulD_oQR6DGC?usp=drive_link' },
 ]
 
 const syllabusDriveLink =
@@ -69,7 +69,7 @@ export default function YearResourcesPage() {
 
   return (
     <div className="container py-8">
-      {is2ndYear && (
+      {is2ndYear ? (
         <div className="mb-6">
           <Button asChild variant="outline" size="sm">
             <Link href="/year/2nd-year/select-branch">
@@ -78,6 +78,17 @@ export default function YearResourcesPage() {
             </Link>
           </Button>
         </div>
+      ) : (
+        !is1stYear && (
+          <div className="mb-6">
+             <Button asChild variant="outline" size="sm">
+                <Link href="/choose-path">
+                  <ChevronLeft className="mr-2 h-4 w-4" />
+                  Back to Home
+                </Link>
+              </Button>
+          </div>
+        )
       )}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">{details.title}</h1>
