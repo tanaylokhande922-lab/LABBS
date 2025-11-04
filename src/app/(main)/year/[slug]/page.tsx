@@ -16,7 +16,9 @@ import Link from 'next/link';
 const pathDetails: { [key: string]: { title: string } } = {
   '1st-year': { title: '1st Year Resources' },
   '2nd-year-cs': { title: '2nd Year - Computer Science' },
-  '2nd-year-mech': { title: '2nd Year - Mechanical' },
+  '2nd-year-it': { title: '2nd Year - Information Technology' },
+  '2nd-year-ece': { title: '2nd Year - Electronics and Computer Engineering' },
+  '2nd-year-ds': { title: '2nd Year - Data Science' },
   gate: { title: 'GATE Preparation Resources' },
   upsc: { title: 'UPSC Preparation Resources' },
 };
