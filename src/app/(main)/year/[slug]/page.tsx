@@ -34,7 +34,7 @@ const resourceCategories = [
 ];
 
 const syllabusDriveLink =
-  'https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/preview';
+  'https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/view?usp=drive_link';
 
 export default function YearResourcesPage() {
   const params = useParams();
@@ -70,19 +70,21 @@ export default function YearResourcesPage() {
                     <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                   </div>
                 </DialogTrigger>
-                <DialogContent className="h-5/6 max-w-5xl p-0">
-                  <DialogHeader className="sr-only">
-                    <DialogTitle>Syllabus</DialogTitle>
+                <DialogContent className="h-5/6 max-w-5xl flex flex-col p-2">
+                  <DialogHeader className="flex flex-row items-center justify-between p-2">
+                    <DialogTitle className="text-lg font-semibold">Syllabus</DialogTitle>
+                    <DialogClose className="rounded-sm bg-background/80 p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Close</span>
+                    </DialogClose>
                   </DialogHeader>
-                  <iframe
-                    src={syllabusDriveLink}
-                    className="h-full w-full"
-                    allow="autoplay"
-                  ></iframe>
-                   <DialogClose className="absolute right-4 top-4 z-10 rounded-sm bg-background/80 p-1 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Close</span>
-                  </DialogClose>
+                  <div className="flex-grow">
+                    <iframe
+                      src={syllabusDriveLink}
+                      className="h-full w-full"
+                      allow="autoplay"
+                    ></iframe>
+                  </div>
                 </DialogContent>
               </Dialog>
             );
