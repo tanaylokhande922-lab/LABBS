@@ -70,7 +70,7 @@ export default function YearResourcesPage() {
                     <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                   </div>
                 </DialogTrigger>
-                <DialogContent className="h-5/6 max-w-4xl p-0">
+                <DialogContent className="h-4/6 max-w-3xl p-0">
                   <DialogHeader className="sr-only">
                     <DialogTitle>Syllabus</DialogTitle>
                   </DialogHeader>
