@@ -1,18 +1,16 @@
-
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
-type MockUser = {
+type UserCredentials = {
   displayName: string | null;
   email: string | null;
-  photoURL: string | null;
 };
 
 type AuthContextType = {
-  user: MockUser | null;
+  user: UserCredentials | null;
   loading: boolean;
-  login: (user: MockUser) => void;
+  login: (user: UserCredentials | null) => void;
   logout: () => void;
 };
 
@@ -23,31 +21,20 @@ const AuthContext = createContext<AuthContextType>({
   logout: () => {},
 });
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<MockUser | null>(null);
+function AuthInitializer({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<UserCredentials | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    } catch (error) {
-      console.error('Failed to parse user from localStorage', error);
-      localStorage.removeItem('user');
-    } finally {
-      setLoading(false);
-    }
+    setLoading(false);
   }, []);
 
-  const login = (user: MockUser) => {
-    localStorage.setItem('user', JSON.stringify(user));
+  const login = (user: UserCredentials | null) => {
     setUser(user);
+    setLoading(false);
   };
 
   const logout = () => {
-    localStorage.removeItem('user');
     setUser(null);
   };
 
@@ -56,6 +43,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
+}
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  return <AuthInitializer>{children}</AuthInitializer>;
 }
 
 export const useAuth = () => useContext(AuthContext);

@@ -35,6 +35,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { auth } from '@/lib/firebase';
 import { Logo } from '../logo';
+import { useAuth } from '../providers/auth-provider';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -83,6 +84,7 @@ export function AuthForm() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const { login } = useAuth();
 
   const loginForm = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -98,7 +100,13 @@ export function AuthForm() {
     setLoading(true);
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      login({
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
       router.push('/choose-path');
     } catch (error: any) {
       toast({
@@ -114,7 +122,13 @@ export function AuthForm() {
   const onLogin = async (values: LoginSchema) => {
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      const result = await signInWithEmailAndPassword(auth, values.email, values.password);
+      const user = result.user;
+      login({
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
       router.push('/choose-path');
     } catch (error: any) {
       toast({
@@ -130,7 +144,13 @@ export function AuthForm() {
   const onSignup = async (values: SignupSchema) => {
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const result = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = result.user;
+       login({
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
       toast({
         title: 'Signup Successful!',
         description: 'You can now log in.',
