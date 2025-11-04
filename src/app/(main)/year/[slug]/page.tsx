@@ -39,12 +39,13 @@ export default function YearResourcesPage() {
   const params = useParams();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
-  const details = (slug && pathDetails[slug]) || { title: 'Resources' };
-  const is1stYearSyllabus = slug === '1st-year';
-
   if (!slug) {
     return null; // Or a loading/error state
   }
+  
+  const details = pathDetails[slug] || { title: 'Resources' };
+  const is1stYearSyllabus = slug === '1st-year';
+
 
   return (
     <div className="container py-8">
@@ -69,17 +70,12 @@ export default function YearResourcesPage() {
                     <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                   </div>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl h-5/6 top-1/2 -translate-y-1/2">
-                  <DialogHeader>
-                    <DialogTitle>{category.name}</DialogTitle>
-                  </DialogHeader>
-                  <div className="h-full w-full overflow-hidden rounded-lg border">
-                    <iframe
-                      src={syllabusDriveLink}
-                      className="h-full w-full"
-                      allow="autoplay"
-                    ></iframe>
-                  </div>
+                <DialogContent className="max-w-4xl h-5/6 p-0 overflow-hidden">
+                  <iframe
+                    src={syllabusDriveLink}
+                    className="h-full w-full"
+                    allow="autoplay"
+                  ></iframe>
                 </DialogContent>
               </Dialog>
             );
