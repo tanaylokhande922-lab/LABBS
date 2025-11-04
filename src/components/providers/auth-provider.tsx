@@ -7,12 +7,19 @@ import {
   ReactNode,
   useEffect,
 } from 'react';
-import { getAuth, onAuthStateChanged, signInAnonymously, User } from 'firebase/auth';
-import { auth, db, storage } from '@/lib/firebase';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadString } from 'firebase/storage';
+import {
+  signInAnonymously,
+  User,
+  updateProfile,
+} from 'firebase/auth';
+import { useUser, useAuth, useFirestore } from '@/firebase';
+import { doc, setDoc, serverTimestamp, Firestore } from 'firebase/firestore';
+import { ref, uploadString, getStorage } from 'firebase/storage';
 import { useToast } from '@/hooks/use-toast';
+import { FirestorePermissionError } from '@/firebase/errors';
+import { errorEmitter } from '@/firebase/error-emitter';
 
+// Simplified credentials, as we only need the display name for anonymous users
 type UserCredentials = {
   uid: string;
   displayName: string | null;
@@ -22,104 +29,122 @@ type UserCredentials = {
 type AuthContextType = {
   user: UserCredentials | null;
   loading: boolean;
-  login: (credentials: { displayName: string; email: string }) => void;
+  login: (credentials: { displayName: string; email: string }) => Promise<void>;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-function AuthInitializer({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const { user: firebaseUser, isUserLoading } = useUser(); // Get user from the central provider
+  const auth = useAuth(); // Get auth instance from the central provider
+  const firestore = useFirestore(); // Get firestore instance
   const [user, setUser] = useState<UserCredentials | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser({
-            uid: firebaseUser.uid,
-            displayName: firebaseUser.displayName,
-            email: firebaseUser.email,
-        });
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    });
+    setLoading(isUserLoading);
+    if (!isUserLoading && firebaseUser) {
+      setUser({
+        uid: firebaseUser.uid,
+        displayName: firebaseUser.displayName,
+        email: firebaseUser.email,
+      });
+    } else if (!isUserLoading && !firebaseUser) {
+      setUser(null);
+    }
+  }, [firebaseUser, isUserLoading]);
 
-    return () => unsubscribe();
-  }, []);
-
-  const saveUserData = async (uid: string, name: string, email: string) => {
+  const saveUserData = (
+    fs: Firestore,
+    userToSave: User,
+    name: string,
+    email: string
+  ) => {
     const signupDate = new Date();
     const userType = 'guest';
 
     // Firestore
-    try {
-      const userRef = doc(db, 'users', uid);
-      await setDoc(userRef, {
-        name,
-        email,
-        signupDate: serverTimestamp(),
-        userType,
+    const userRef = doc(fs, 'users', userToSave.uid);
+    const userData = {
+      id: userToSave.uid,
+      displayName: name,
+      email,
+      signupDate: serverTimestamp(),
+      userType,
+    };
+    setDoc(userRef, userData, { merge: true }).catch((serverError) => {
+      const permissionError = new FirestorePermissionError({
+        path: userRef.path,
+        operation: 'write',
+        requestResourceData: userData,
       });
-       toast({
-        title: 'User data saved to Firestore',
-        description: `Name: ${name}, Email: ${email}`,
-      });
-    } catch (error) {
-      console.error('Error saving to Firestore:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Firestore Error',
-        description: 'Could not save user data.',
-      });
-    }
+      errorEmitter.emit('permission-error', permissionError);
+    });
 
     // Firebase Storage
-    try {
-      const fileContent = `Name: ${name}\nEmail: ${email}\nSignup Date: ${signupDate.toISOString()}\nUser Type: ${userType}`;
-      const storageRef = ref(storage, `user_data/${uid}.txt`);
-      await uploadString(storageRef, fileContent);
-       toast({
-        title: 'User data saved to Storage',
-        description: `File uploaded to user_data/${uid}.txt`,
-      });
-    } catch (error) {
+    const storage = getStorage();
+    const fileContent = `Name: ${name}\nEmail: ${email}\nSignup Date: ${signupDate.toISOString()}\nUser Type: ${userType}`;
+    const storageRef = ref(storage, `user_data/${userToSave.uid}.txt`);
+    uploadString(storageRef, fileContent).catch((error) => {
       console.error('Error saving to Storage:', error);
       toast({
         variant: 'destructive',
         title: 'Storage Error',
         description: 'Could not upload user data file.',
       });
-    }
+    });
   };
 
-  const login = async (credentials: { displayName: string, email: string }) => {
+  const login = async (credentials: { displayName: string; email: string }) => {
     setLoading(true);
     try {
-      const auth = getAuth();
+      if (!auth) {
+        throw new Error('Auth service is not available.');
+      }
+      
       const userCredential = await signInAnonymously(auth);
       const firebaseUser = userCredential.user;
-      
+
       if (firebaseUser) {
-        const userData = {
-            uid: firebaseUser.uid,
-            displayName: credentials.displayName,
-            email: credentials.email,
+        // Update Firebase Auth profile
+        await updateProfile(firebaseUser, {
+          displayName: credentials.displayName,
+        });
+
+        const userWithEmail: UserCredentials = {
+          uid: firebaseUser.uid,
+          displayName: credentials.displayName,
+          email: credentials.email,
         };
-        setUser(userData);
-        await saveUserData(firebaseUser.uid, credentials.displayName, credentials.email);
+        setUser(userWithEmail);
+
+        // Save data to Firestore and Storage
+        saveUserData(firestore, firebaseUser, credentials.displayName, credentials.email);
+        
+        toast({
+          title: 'Signed in as Guest',
+          description: `Welcome, ${credentials.displayName}!`,
+        });
       }
     } catch (error) {
-      console.error("Anonymous sign-in failed", error);
+      console.error('Anonymous sign-in failed', error);
+      toast({
+        variant: 'destructive',
+        title: 'Sign-in Failed',
+        description:
+          'Could not sign you in. Please check the console for details.',
+      });
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
   const logout = () => {
-    auth.signOut();
+    if (auth) {
+      auth.signOut();
+    }
     setUser(null);
   };
 
@@ -128,10 +153,6 @@ function AuthInitializer({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  return <AuthInitializer>{children}</AuthInitializer>;
 }
 
 export const useAuth = () => {
