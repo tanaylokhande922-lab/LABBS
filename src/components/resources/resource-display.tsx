@@ -1,20 +1,17 @@
 'use client';
 
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { storage } from '@/lib/firebase';
-import { getDownloadURL, listAll, ref } from 'firebase/storage';
+import { useFirebaseApp } from '@/firebase';
 import {
-  AlertTriangle,
-  Download,
-  FileText,
-  Loader2,
-} from 'lucide-react';
+  getDownloadURL,
+  getStorage,
+  listAll,
+  ref,
+  Storage,
+} from 'firebase/storage';
+import { AlertTriangle, Download, FileText } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type FileItem = {
@@ -26,8 +23,19 @@ export default function ResourceDisplay({ path }: { path: string }) {
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [storage, setStorage] = useState<Storage | null>(null);
+
+  const app = useFirebaseApp();
 
   useEffect(() => {
+    if (app) {
+      setStorage(getStorage(app));
+    }
+  }, [app]);
+
+  useEffect(() => {
+    if (!storage) return;
+
     const fetchFiles = async () => {
       setLoading(true);
       setError(null);
@@ -38,9 +46,7 @@ export default function ResourceDisplay({ path }: { path: string }) {
         const res = await listAll(storageRef);
 
         if (res.items.length === 0) {
-          setError(
-            'No resources found in this category. Check back later!'
-          );
+          setError('No resources found in this category. Check back later!');
           return;
         }
 
@@ -65,7 +71,7 @@ export default function ResourceDisplay({ path }: { path: string }) {
     };
 
     fetchFiles();
-  }, [path]);
+  }, [path, storage]);
 
   if (loading) {
     return (
