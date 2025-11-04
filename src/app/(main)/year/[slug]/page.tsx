@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowUpRight, ChevronLeft, FileText, FolderOpen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useState } from 'react';
+import NestedResourceDisplay from '@/components/resources/nested-resource-display';
 
 const pathDetails: { [key: string]: { title: string } } = {
   '1st-year': { title: '1st Year Resources' },
@@ -29,6 +31,13 @@ const resourceCategories = [
   { id: 'book-pdfs', name: 'Book PDFs', icon: <FolderOpen className="h-5 w-5 text-primary" /> },
   { id: 'subject-treasure', name: 'Subject Treasure', icon: <FolderOpen className="h-5 w-5 text-primary" /> },
 ];
+
+const firstYearSubjectTreasureSubCategories = [
+  { id: 'physics', name: 'Physics' },
+  { id: 'm1', name: 'M1' },
+  { id: 'eg', name: 'EG' },
+  { id: 'beee', name: 'BEEE' },
+]
 
 const syllabusDriveLink =
   'https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/view?usp=drive_link';
@@ -165,6 +174,31 @@ export default function YearResourcesPage() {
                 </Dialog>
               );
             }
+            if (category.id === 'subject-treasure') {
+                return (
+                  <Dialog key={category.id}>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between rounded-lg border bg-card px-4 py-6 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <div className="flex items-center gap-3">
+                          {category.icon}
+                          <span>{category.name}</span>
+                        </div>
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[625px]">
+                       <NestedResourceDisplay
+                        categoryName={category.name}
+                        basePath={`${slug}/${category.id}`}
+                        subCategories={firstYearSubjectTreasureSubCategories}
+                       />
+                    </DialogContent>
+                  </Dialog>
+                );
+              }
           }
 
           // Special static content for 2nd Year

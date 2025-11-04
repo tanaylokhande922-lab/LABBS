@@ -1,0 +1,77 @@
+'use client';
+
+import { useState } from 'react';
+import ResourceDisplay from './resource-display';
+import { Button } from '@/components/ui/button';
+import { DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ArrowLeft, Folder } from 'lucide-react';
+
+interface NestedResourceDisplayProps {
+  categoryName: string;
+  basePath: string;
+  subCategories: { id: string; name: string }[];
+}
+
+export default function NestedResourceDisplay({
+  categoryName,
+  basePath,
+  subCategories,
+}: NestedResourceDisplayProps) {
+  const [selectedSubCategory, setSelectedSubCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  const handleSubCategoryClick = (subCategory: { id: string; name: string }) => {
+    setSelectedSubCategory(subCategory);
+  };
+
+  const handleBackClick = () => {
+    setSelectedSubCategory(null);
+  };
+
+  if (selectedSubCategory) {
+    return (
+      <>
+        <DialogHeader>
+          <DialogTitle className="flex items-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBackClick}
+              className="mr-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="sr-only">Back</span>
+            </Button>
+            {selectedSubCategory.name}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="py-4">
+          <ResourceDisplay path={`${basePath}/${selectedSubCategory.id}`} />
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <DialogHeader>
+        <DialogTitle>{categoryName}</DialogTitle>
+      </DialogHeader>
+      <div className="grid grid-cols-1 gap-4 py-4 sm:grid-cols-2">
+        {subCategories.map((sub) => (
+          <Button
+            key={sub.id}
+            variant="outline"
+            className="h-auto justify-start gap-3 py-4"
+            onClick={() => handleSubCategoryClick(sub)}
+          >
+            <Folder className="h-5 w-5 text-primary" />
+            <span className="font-semibold">{sub.name}</span>
+          </Button>
+        ))}
+      </div>
+    </>
+  );
+}
