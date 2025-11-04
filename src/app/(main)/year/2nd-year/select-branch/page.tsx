@@ -1,12 +1,15 @@
 'use client';
 
 import { BranchCard } from '@/components/branch-card';
+import { Button } from '@/components/ui/button';
 import {
   CircuitBoard,
   Cpu,
   Database,
   Network,
+  ChevronLeft,
 } from 'lucide-react';
+import Link from 'next/link';
 
 export default function SelectBranchPage() {
   const branches = [
@@ -34,6 +37,14 @@ export default function SelectBranchPage() {
 
   return (
     <div className="container py-8">
+      <div className="mb-6">
+        <Button asChild variant="outline" size="sm">
+          <Link href="/choose-path">
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Link>
+        </Button>
+      </div>
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold tracking-tight">
           Select Your Branch
