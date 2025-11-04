@@ -44,13 +44,13 @@ export function AuthForm() {
     defaultValues: { name: '', email: '' },
   });
 
-  const onSubmit = (values: LoginSchema) => {
+  const onSubmit = async (values: LoginSchema) => {
     setLoading(true);
-    // Simulate a guest login
-    login({
+    await login({
       displayName: values.name,
       email: values.email,
     });
+    setLoading(false);
     router.push('/choose-path');
   };
 
