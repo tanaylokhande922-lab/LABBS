@@ -8,24 +8,30 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useAuth } from '@/components/providers/auth-provider';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/logo';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useState } from 'react';
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
   const backgroundImage = PlaceHolderImages.find(
     (img) => img.id === 'login-background'
   );
 
   const handleLogin = () => {
     login({
-      displayName: 'Guest User',
-      email: 'guest@example.com',
-      photoURL: `https://i.pravatar.cc/150?u=guest`,
+      displayName: name || 'Guest User',
+      email: email || 'guest@example.com',
+      photoURL: `https://i.pravatar.cc/150?u=${email || 'guest'}`,
     });
     router.push('/choose-path');
   };
@@ -53,7 +59,26 @@ export default function LoginPage() {
               Your central hub for college resources. Sign in to continue.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
             <Button onClick={handleLogin} className="w-full">
               Sign In as Guest
             </Button>
