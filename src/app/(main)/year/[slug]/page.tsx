@@ -1,3 +1,4 @@
+
 'use client';
 
 import ResourceDisplay from '@/components/resources/resource-display';
@@ -31,7 +32,6 @@ const resourceCategories = [
   { id: 'subject-treasure', name: 'Subject Treasure' },
 ];
 
-// Google Drive links can be embedded using a specific URL format
 const syllabusDriveLink =
   'https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/preview';
 
@@ -42,10 +42,9 @@ export default function YearResourcesPage() {
   if (!slug) {
     return null; // Or a loading/error state
   }
-  
+
   const details = pathDetails[slug] || { title: 'Resources' };
   const is1stYearSyllabus = slug === '1st-year';
-
 
   return (
     <div className="container py-8">
@@ -70,7 +69,10 @@ export default function YearResourcesPage() {
                     <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                   </div>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl h-5/6 p-0 overflow-hidden">
+                <DialogContent className="h-5/6 max-w-4xl p-0">
+                  <DialogHeader className="sr-only">
+                    <DialogTitle>Syllabus</DialogTitle>
+                  </DialogHeader>
                   <iframe
                     src={syllabusDriveLink}
                     className="h-full w-full"
