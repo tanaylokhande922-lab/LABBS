@@ -4,15 +4,15 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
-interface PathCardProps {
+interface BranchCardProps {
   title: string;
-  href: string;
+  slug: string;
   icon: React.ReactNode;
 }
 
-export function PathCard({ title, href, icon }: PathCardProps) {
+export function BranchCard({ title, slug, icon }: BranchCardProps) {
   return (
-    <Link href={href}>
+    <Link href={`/year/${slug}`}>
       <Card className="group h-full transform-gpu transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-2xl hover:bg-primary/5">
         <CardHeader>
           <div className="flex items-center justify-between">

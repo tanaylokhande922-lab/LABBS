@@ -1,13 +1,6 @@
-
 'use client';
 
 import ResourceDisplay from '@/components/resources/resource-display';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import {
   Dialog,
   DialogContent,
@@ -22,7 +15,8 @@ import Link from 'next/link';
 
 const pathDetails: { [key: string]: { title: string } } = {
   '1st-year': { title: '1st Year Resources' },
-  '2nd-year': { title: '2nd Year Resources' },
+  '2nd-year-cs': { title: '2nd Year - Computer Science' },
+  '2nd-year-mech': { title: '2nd Year - Mechanical' },
   gate: { title: 'GATE Preparation Resources' },
   upsc: { title: 'UPSC Preparation Resources' },
 };
@@ -65,7 +59,7 @@ export default function YearResourcesPage() {
 
       <div className="w-full space-y-4">
         {resourceCategories.map((category) => {
-          if (is1stYear && category.id === 'syllabus') {
+          if (category.id === 'syllabus') {
             return (
               <Link
                 key={category.id}
