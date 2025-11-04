@@ -40,6 +40,9 @@ const summer2025QuestionPaperLink =
   'https://drive.google.com/drive/folders/1y-5JRUvJEhBgyQFT9u4JYLTfi6ufTuAt?usp=drive_link';
 const summer2025SupplyQuestionPaperLink =
   'https://drive.google.com/drive/folders/1CknMU-u2iw91EViQkHWKNc3XeBK6v8J2?usp=drive_link';
+const em3PyqLink =
+  'https://drive.google.com/file/d/17tYDl1BfaTrVpD_BoCzh_4wjdD56Lrs5/view?usp=drive_link';
+
 
 export default function YearResourcesPage() {
   const params = useParams();
@@ -153,23 +156,64 @@ export default function YearResourcesPage() {
             }
           }
 
-          // Special static content for 2nd Year ECE Syllabus
-          if (is2ndYearEce && category.id === 'syllabus') {
-            return (
-              <Link
-                key={category.id}
-                href={eceSyllabusDriveLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex cursor-pointer items-center justify-between rounded-lg border bg-card px-4 py-4 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
-              >
-                <div className="flex items-center gap-3">
-                  {category.icon}
-                  <span>{category.name}</span>
-                </div>
-                <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-              </Link>
-            );
+          // Special static content for 2nd Year ECE
+          if (is2ndYearEce) {
+             if (category.id === 'syllabus') {
+              return (
+                <Link
+                  key={category.id}
+                  href={eceSyllabusDriveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex cursor-pointer items-center justify-between rounded-lg border bg-card px-4 py-4 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+                >
+                  <div className="flex items-center gap-3">
+                    {category.icon}
+                    <span>{category.name}</span>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                </Link>
+              );
+            }
+            if (category.id === 'question-papers') {
+              return (
+                <Dialog key={category.id}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-between rounded-lg border bg-card px-4 py-6 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <div className="flex items-center gap-3">
+                        {category.icon}
+                        <span>{category.name}</span>
+                      </div>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[625px]">
+                    <DialogHeader>
+                      <DialogTitle>{category.name}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-3 py-4">
+                      <Link
+                        href={em3PyqLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-secondary"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
+                          <span className="truncate text-sm font-medium">
+                            EM III ALL PYQ
+                          </span>
+                        </div>
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      </Link>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              );
+            }
           }
           
           // Dynamic content for all other paths and remaining categories
