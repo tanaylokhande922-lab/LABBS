@@ -32,6 +32,8 @@ const resourceCategories = [
 
 const syllabusDriveLink =
   'https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/view?usp=drive_link';
+const eceSyllabusDriveLink = 
+  'https://drive.google.com/file/d/1hqzsWEdW2dXo4co3aknY1IqiwAmoKjU1/view?usp=drive_link';
 const winter2024QuestionPaperLink =
   'https://drive.google.com/drive/folders/1GsIJ2wLypRbI5gavvqT4wwilQTM4oWD2?usp=drive_link';
 const summer2025QuestionPaperLink =
@@ -49,6 +51,7 @@ export default function YearResourcesPage() {
 
   const details = pathDetails[slug] || { title: 'Resources' };
   const is1stYear = slug === '1st-year';
+  const is2ndYearEce = slug === '2nd-year-ece';
 
   return (
     <div className="container py-8">
@@ -148,6 +151,25 @@ export default function YearResourcesPage() {
                 </Dialog>
               );
             }
+          }
+
+          // Special static content for 2nd Year ECE Syllabus
+          if (is2ndYearEce && category.id === 'syllabus') {
+            return (
+              <Link
+                key={category.id}
+                href={eceSyllabusDriveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex cursor-pointer items-center justify-between rounded-lg border bg-card px-4 py-4 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+              >
+                <div className="flex items-center gap-3">
+                  {category.icon}
+                  <span>{category.name}</span>
+                </div>
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+              </Link>
+            );
           }
           
           // Dynamic content for all other paths and remaining categories
