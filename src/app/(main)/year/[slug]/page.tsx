@@ -30,6 +30,8 @@ const syllabusDriveLink =
   'https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/view?usp=drive_link';
 const winter2024QuestionPaperLink =
   'https://drive.google.com/drive/folders/1GsIJ2wLypRbI5gavvqT4wwilQTM4oWD2?usp=drive_link';
+const summer2025QuestionPaperLink =
+  'https://drive.google.com/drive/folders/1y-5JRUvJEhBgyQFT9u4JYLTfi6ufTuAt?usp=drive_link';
 
 export default function YearResourcesPage() {
   const params = useParams();
@@ -93,6 +95,20 @@ export default function YearResourcesPage() {
                         <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
                         <span className="truncate text-sm font-medium">
                           Winter-2024_Regular_Sem-1_Question Paper
+                        </span>
+                      </div>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    </Link>
+                    <Link
+                      href={summer2025QuestionPaperLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-secondary"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
+                        <span className="truncate text-sm font-medium">
+                          Summer-2025_ Regular_Sem-2_Question Paper
                         </span>
                       </div>
                       <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
