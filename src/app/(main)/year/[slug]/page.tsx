@@ -35,7 +35,7 @@ const resourceCategories = [
 const firstYearSubjectTreasureSubCategories = [
   { id: 'physics', name: 'Physics' },
   { id: 'm1', name: 'M1' },
-  { id: 'eg', name: 'EG' },
+  { id: 'eg', name: 'EG', href: 'https://drive.google.com/drive/folders/1YzeBQm1WgWeZ5eYbhJPb-hd26Qg6sEXy?usp=drive_link' },
   { id: 'beee', name: 'BEEE' },
   { id: 'bcme', name: 'BCME', href: 'https://drive.google.com/drive/folders/1Od0uMGZyd9BsqJ7Un3oTEulD_oQR6DGC?usp=drive_link' },
 ]
