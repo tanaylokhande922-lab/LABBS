@@ -14,10 +14,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { ArrowUpRight, FileText, FolderOpen, X } from 'lucide-react';
+import { ArrowUpRight, FileText, FolderOpen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -84,7 +83,7 @@ export default function YearResourcesPage() {
             );
           }
 
-          if (is1stYear && category.id === 'question-papers') {
+          if (category.id === 'question-papers') {
             return (
               <Dialog key={category.id}>
                 <DialogTrigger asChild>
@@ -152,21 +151,37 @@ export default function YearResourcesPage() {
             );
           }
 
-          return (
-            <Accordion type="multiple" className="w-full" key={category.id}>
-              <AccordionItem
-                value={category.id}
-                className="rounded-lg border bg-card px-4 shadow-sm"
-              >
-                <AccordionTrigger className="text-md py-4 font-semibold hover:no-underline">
-                  {category.name}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ResourceDisplay path={`${slug}/${category.id}`} />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          );
+          if (
+            category.id === 'book-pdfs' ||
+            category.id === 'subject-treasure'
+          ) {
+            return (
+              <Dialog key={category.id}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between rounded-lg border bg-card px-4 py-6 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FolderOpen className="h-5 w-5 text-primary" />
+                      <span>{category.name}</span>
+                    </div>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[625px]">
+                  <DialogHeader>
+                    <DialogTitle>{category.name}</DialogTitle>
+                  </DialogHeader>
+                  <div className="py-4">
+                    <ResourceDisplay path={`${slug}/${category.id}`} />
+                  </div>
+                </DialogContent>
+              </Dialog>
+            );
+          }
+
+          return null;
         })}
       </div>
     </div>
