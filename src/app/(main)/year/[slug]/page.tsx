@@ -8,7 +8,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { ArrowUpRight, FileText } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { ArrowUpRight, FileText, FolderOpen, X } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -55,7 +64,7 @@ export default function YearResourcesPage() {
         </p>
       </div>
 
-      <Accordion type="multiple" className="w-full space-y-4">
+      <div className="w-full space-y-4">
         {resourceCategories.map((category) => {
           if (is1stYear && category.id === 'syllabus') {
             return (
@@ -77,16 +86,24 @@ export default function YearResourcesPage() {
 
           if (is1stYear && category.id === 'question-papers') {
             return (
-              <AccordionItem
-                value={category.id}
-                key={category.id}
-                className="rounded-lg border bg-card px-4 shadow-sm"
-              >
-                <AccordionTrigger className="text-md py-4 font-semibold hover:no-underline">
-                  {category.name}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="space-y-3">
+              <Dialog key={category.id}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between rounded-lg border bg-card px-4 py-6 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FolderOpen className="h-5 w-5 text-primary" />
+                      <span>{category.name}</span>
+                    </div>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[625px]">
+                  <DialogHeader>
+                    <DialogTitle>{category.name}</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-3 py-4">
                     <Link
                       href={winter2024QuestionPaperLink}
                       target="_blank"
@@ -129,29 +146,29 @@ export default function YearResourcesPage() {
                       </div>
                       <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                     </Link>
-                    <ResourceDisplay path={`${slug}/${category.id}`} />
                   </div>
-                </AccordionContent>
-              </AccordionItem>
+                </DialogContent>
+              </Dialog>
             );
           }
 
           return (
-            <AccordionItem
-              value={category.id}
-              key={category.id}
-              className="rounded-lg border bg-card px-4 shadow-sm"
-            >
-              <AccordionTrigger className="text-md py-4 font-semibold hover:no-underline">
-                {category.name}
-              </AccordionTrigger>
-              <AccordionContent>
-                <ResourceDisplay path={`${slug}/${category.id}`} />
-              </AccordionContent>
-            </AccordionItem>
+            <Accordion type="multiple" className="w-full" key={category.id}>
+              <AccordionItem
+                value={category.id}
+                className="rounded-lg border bg-card px-4 shadow-sm"
+              >
+                <AccordionTrigger className="text-md py-4 font-semibold hover:no-underline">
+                  {category.name}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <ResourceDisplay path={`${slug}/${category.id}`} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           );
         })}
-      </Accordion>
+      </div>
     </div>
   );
 }
