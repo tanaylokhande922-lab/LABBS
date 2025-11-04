@@ -1,11 +1,11 @@
 'use client';
 
 import { PathCard } from '@/components/path-card';
-import { useAuth } from '@/components/providers/auth-provider';
+import { useAuthContext } from '@/components/providers/auth-provider';
 import { BookOpen, BookOpenCheck, Landmark, Target } from 'lucide-react';
 
 export default function ChoosePathPage() {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   const paths = [
     {

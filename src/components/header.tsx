@@ -4,7 +4,7 @@
 import { LogOut, User as UserIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { useAuth } from '@/components/providers/auth-provider';
+import { useAuthContext } from '@/components/providers/auth-provider';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -18,7 +18,7 @@ import { Logo } from './logo';
 import { Button } from './ui/button';
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuthContext();
   const router = useRouter();
 
   const handleLogout = () => {

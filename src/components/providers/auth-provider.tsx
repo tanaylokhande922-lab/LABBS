@@ -12,9 +12,10 @@ import {
   User,
   updateProfile,
 } from 'firebase/auth';
-import { useUser, useAuth, useFirestore } from '@/firebase';
+import { useUser, useAuth as useFirebaseAuth, useFirestore } from '@/firebase';
 import { doc, setDoc, serverTimestamp, Firestore } from 'firebase/firestore';
 import { ref, uploadString, getStorage } from 'firebase/storage';
+import { getApp } from 'firebase/app';
 import { useToast } from '@/hooks/use-toast';
 import { FirestorePermissionError } from '@/firebase/errors';
 import { errorEmitter } from '@/firebase/error-emitter';
@@ -37,7 +38,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { user: firebaseUser, isUserLoading } = useUser(); // Get user from the central provider
-  const auth = useAuth(); // Get auth instance from the central provider
+  const auth = useFirebaseAuth(); // Get auth instance from the central provider
   const firestore = useFirestore(); // Get firestore instance
   const [user, setUser] = useState<UserCredentials | null>(null);
   const [loading, setLoading] = useState(true);
@@ -84,10 +85,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     // Firebase Storage
-    const storage = getStorage();
+    const storage = getStorage(getApp());
     const fileContent = `Name: ${name}\nEmail: ${email}\nSignup Date: ${signupDate.toISOString()}\nUser Type: ${userType}`;
     const storageRef = ref(storage, `user_data/${userToSave.uid}.txt`);
-    uploadString(storageRef, fileContent).catch((error) => {
+    uploadString(storageRef, fileContent)
+    .then(()=> {
+        toast({
+          title: 'Data Saved',
+          description: 'User data saved to Firestore and Storage.',
+        });
+    })
+    .catch((error) => {
       console.error('Error saving to Storage:', error);
       toast({
         variant: 'destructive',
@@ -113,6 +121,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           displayName: credentials.displayName,
         });
 
+        // This is a bit of a hack to get the email into the user object for the UI
+        // since anonymous users don't have an email field by default.
         const userWithEmail: UserCredentials = {
           uid: firebaseUser.uid,
           displayName: credentials.displayName,
@@ -121,7 +131,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(userWithEmail);
 
         // Save data to Firestore and Storage
-        saveUserData(firestore, firebaseUser, credentials.displayName, credentials.email);
+        if(firestore) {
+            saveUserData(firestore, firebaseUser, credentials.displayName, credentials.email);
+        }
         
         toast({
           title: 'Signed in as Guest',
@@ -155,10 +167,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export const useAuth = () => {
+export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuthContext must be used within an AuthProvider');
   }
   return context;
 };

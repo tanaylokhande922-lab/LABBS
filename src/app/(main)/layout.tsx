@@ -1,13 +1,13 @@
 'use client';
 
 import Header from '@/components/header';
-import { useAuth } from '@/components/providers/auth-provider';
+import { useAuthContext } from '@/components/providers/auth-provider';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthContext();
   const router = useRouter();
 
   useEffect(() => {

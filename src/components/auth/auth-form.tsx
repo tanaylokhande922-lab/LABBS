@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Logo } from '../logo';
-import { useAuth } from '../providers/auth-provider';
+import { useAuthContext } from '../providers/auth-provider';
 
 const loginSchema = z.object({
   name: z.string().min(1, { message: 'Name is required.' }),
@@ -37,7 +37,7 @@ type LoginSchema = z.infer<typeof loginSchema>;
 export function AuthForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login } = useAuth();
+  const { login } = useAuthContext();
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
