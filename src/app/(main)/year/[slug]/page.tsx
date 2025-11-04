@@ -8,7 +8,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { ArrowUpRight } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { ArrowUpRight, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -25,6 +32,10 @@ const resourceCategories = [
   { id: 'book-pdfs', name: 'Book PDFs' },
   { id: 'subject-treasure', name: 'Subject Treasure' },
 ];
+
+// Google Drive links can be embedded using a specific URL format
+const syllabusDriveLink =
+  'https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/preview';
 
 export default function YearResourcesPage() {
   const params = useParams();
@@ -50,20 +61,29 @@ export default function YearResourcesPage() {
         {resourceCategories.map((category) => {
           if (is1stYearSyllabus && category.id === 'syllabus') {
             return (
-              <div
-                key={category.id}
-                className="rounded-lg border bg-card px-4 shadow-sm"
-              >
-                <Link
-                  href="https://drive.google.com/file/d/1rZGeYu9UYM375_GNkt5T4ZWZa6trZdLs/view?usp=drive_link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-1 items-center justify-between py-4 text-md font-semibold transition-all hover:underline"
-                >
-                  {category.name}
-                  <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-                </Link>
-              </div>
+              <Dialog key={category.id}>
+                <DialogTrigger asChild>
+                  <div className="flex cursor-pointer items-center justify-between rounded-lg border bg-card px-4 py-4 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground">
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-5 w-5 text-primary" />
+                      <span>{category.name}</span>
+                    </div>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="h-[90vh] max-w-[90vw] sm:max-w-4xl">
+                  <DialogHeader>
+                    <DialogTitle>{category.name}</DialogTitle>
+                  </DialogHeader>
+                  <div className="h-full w-full overflow-hidden rounded-lg border">
+                    <iframe
+                      src={syllabusDriveLink}
+                      className="h-full w-full"
+                      allow="autoplay"
+                    ></iframe>
+                  </div>
+                </DialogContent>
+              </Dialog>
             );
           }
 
