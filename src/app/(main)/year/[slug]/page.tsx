@@ -56,6 +56,8 @@ const secondYearPyqLink =
   'https://drive.google.com/drive/folders/1-Kizk-ZQ6BV0ahdfQgRy_Tc_Cil_09f0?usp=sharing';
 const firstYearAllSubjectPyqLink = 
   'https://drive.google.com/drive/folders/14OMYxRQjVUbpCjNdRS0Df1Avc12y-9jq?usp=sharing';
+const engMechanicsBookLink =
+  'https://drive.google.com/file/d/1UDFHInnmqarCFKzaRHqq2ihqMDExTT6F/view?usp=drivesdk';
 
 
 export default function YearResourcesPage() {
@@ -204,6 +206,47 @@ export default function YearResourcesPage() {
                 </Dialog>
               );
             }
+
+            if (category.id === 'book-pdfs') {
+              return (
+                <Dialog key={category.id}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-between rounded-lg border bg-card px-4 py-6 text-md font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <div className="flex items-center gap-3">
+                        {category.icon}
+                        <span>{category.name}</span>
+                      </div>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[625px]">
+                    <DialogHeader>
+                      <DialogTitle>{category.name}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-3 py-4">
+                      <Link
+                        href={engMechanicsBookLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-secondary"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
+                          <span className="truncate text-sm font-medium">
+                            ENG MECHANICS
+                          </span>
+                        </div>
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      </Link>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              );
+            }
+
             if (category.id === 'subject-treasure') {
                 return (
                   <Dialog key={category.id}>
