@@ -58,6 +58,10 @@ const firstYearAllSubjectPyqLink =
   'https://drive.google.com/drive/folders/14OMYxRQjVUbpCjNdRS0Df1Avc12y-9jq?usp=sharing';
 const engMechanicsBookLink =
   'https://drive.google.com/file/d/1UDFHInnmqarCFKzaRHqq2ihqMDExTT6F/view?usp=drivesdk';
+const m1BookLink =
+  'https://drive.google.com/file/d/1r0_8-EpkktxnxLaAnDYAnmfbMqw7jvp1/view?usp=drivesdk';
+const engineeringPhysicsBookLink =
+  'https://drive.google.com/file/d/1oIXqmkC9axrJzH42AimKzcGtFDgJwNCF/view?usp=drivesdk';
 
 
 export default function YearResourcesPage() {
@@ -237,6 +241,34 @@ export default function YearResourcesPage() {
                           <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
                           <span className="truncate text-sm font-medium">
                             ENG MECHANICS
+                          </span>
+                        </div>
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      </Link>
+                      <Link
+                        href={m1BookLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-secondary"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
+                          <span className="truncate text-sm font-medium">
+                            M1
+                          </span>
+                        </div>
+                        <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      </Link>
+                      <Link
+                        href={engineeringPhysicsBookLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-secondary"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FileText className="h-5 w-5 flex-shrink-0 text-primary" />
+                          <span className="truncate text-sm font-medium">
+                            Engineering Physics
                           </span>
                         </div>
                         <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" />
